@@ -15,8 +15,8 @@ from botbuilder.core import (
 from botbuilder.core.integration import aiohttp_error_middleware
 from botbuilder.schema import Activity, ActivityTypes
 
-from world_capitals_bot.bot import MyBot
-from world_capitals_bot.config import DefaultConfig
+from bot import MyBot
+from config import DefaultConfig
 
 CONFIG = DefaultConfig()
 
