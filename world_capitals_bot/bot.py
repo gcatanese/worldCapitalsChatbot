@@ -4,7 +4,7 @@
 from botbuilder.core import ActivityHandler, TurnContext
 from botbuilder.schema import ChannelAccount
 from enum import Enum
-
+import logging
 
 def get_event(self, text):
     event = None
@@ -34,7 +34,7 @@ class MyBot(ActivityHandler):
     def get_input(turn_context):
         text = turn_context.activity.text
 
-        print(text)
+        logging.info(f'input: {text}')
 
         return text
 

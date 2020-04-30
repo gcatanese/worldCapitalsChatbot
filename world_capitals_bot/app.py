@@ -4,6 +4,7 @@
 import sys
 import traceback
 from datetime import datetime
+import logging
 
 from aiohttp import web
 from aiohttp.web import Request, Response, json_response
@@ -18,10 +19,13 @@ from botbuilder.schema import Activity, ActivityTypes
 from bot import MyBot
 from config import DefaultConfig
 
+logging.basicConfig(level=logging.INFO)
+
 CONFIG = DefaultConfig()
 
 # Create adapter.
 # See https://aka.ms/about-bot-adapter to learn more about how bots work.
+
 SETTINGS = BotFrameworkAdapterSettings(CONFIG.APP_ID, CONFIG.APP_PASSWORD)
 ADAPTER = BotFrameworkAdapter(SETTINGS)
 
@@ -31,7 +35,7 @@ async def on_error(context: TurnContext, error: Exception):
     # This check writes out errors to console log .vs. app insights.
     # NOTE: In production environment, you should consider logging this to Azure
     #       application insights.
-    print(f"\n [on_turn_error] unhandled error: {error}", file=sys.stderr)
+    logging.error(f"\n [on_turn_error] unhandled error: {error}", file=sys.stderr)
     traceback.print_exc()
 
     # Send a message to the user
@@ -62,6 +66,7 @@ BOT = MyBot()
 
 # Listen for incoming requests on /api/messages
 async def messages(req: Request) -> Response:
+    logging.info("msg")
     # Main bot message handler.
     if "application/json" in req.headers["Content-Type"]:
         body = await req.json()
@@ -81,7 +86,7 @@ async def messages(req: Request) -> Response:
 
 
 async def home(req):
-    print("Ok")
+    logging.info("Ok")
 
     return web.Response(text='Ok', content_type='text/html')
 
@@ -92,6 +97,9 @@ APP.router.add_get("/", home)
 
 if __name__ == "__main__":
     try:
+        logging.debug("Starting")
+
         web.run_app(APP, host="0.0.0.0", port=CONFIG.PORT)
     except Exception as error:
+        logging.error(error)
         raise error
