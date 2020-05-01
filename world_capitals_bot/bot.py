@@ -2,29 +2,10 @@
 # Licensed under the MIT License.
 
 from botbuilder.core import ActivityHandler, TurnContext
-from botbuilder.schema import ChannelAccount
-from enum import Enum
+from botbuilder.schema import ChannelAccount, Activity, ActivityTypes
+from time import sleep
 import logging
-
-def get_event(self, text):
-    event = None
-
-    if is_greet_event(text):
-        event = Event.GREET
-
-    return event
-
-
-def is_game_on(self, text):
-    l = ['game on', 'lets start', 'lets go']
-
-    return text.lower() in l
-
-
-def is_greet_event(self, text):
-    l = ['hi', 'hello', 'good day']
-
-    return text.lower() in l
+from conversation.flow_manager import next
 
 
 class MyBot(ActivityHandler):
@@ -42,9 +23,21 @@ class MyBot(ActivityHandler):
 
         text = MyBot.get_input(turn_context)
 
-        event = get_event(text)
+        response = next(text)
 
-        await turn_context.send_activity(f"You said '{text}'")
+        await turn_context.send_activities([
+            Activity(
+                type=ActivityTypes.typing
+            ),
+            Activity(
+                type="delay",
+                value=2000
+            ),
+            Activity(
+                type=ActivityTypes.message,
+                text=response
+            )
+        ])
 
     async def on_members_added_activity(
             self,
@@ -56,8 +49,4 @@ class MyBot(ActivityHandler):
                 await turn_context.send_activity("Hello and welcome!")
 
 
-class Event(Enum):
-    GREET = 1
-    GAME_ON = 2
-    GAME_OVER = 3
-    BYE = 4
+

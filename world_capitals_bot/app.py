@@ -66,7 +66,7 @@ BOT = MyBot()
 
 # Listen for incoming requests on /api/messages
 async def messages(req: Request) -> Response:
-    logging.info("msg")
+
     # Main bot message handler.
     if "application/json" in req.headers["Content-Type"]:
         body = await req.json()
@@ -79,9 +79,11 @@ async def messages(req: Request) -> Response:
     try:
         response = await ADAPTER.process_activity(activity, auth_header, BOT.on_turn)
         if response:
-            return json_response(data=response.body, status=response.status)
+            json_resp = json_response(data=response.body, status=response.status)
+            return json_resp
         return Response(status=201)
     except Exception as exception:
+        logging.error(exception)
         raise exception
 
 
@@ -97,8 +99,6 @@ APP.router.add_get("/", home)
 
 if __name__ == "__main__":
     try:
-        logging.debug("Starting")
-
         web.run_app(APP, host="0.0.0.0", port=CONFIG.PORT)
     except Exception as error:
         logging.error(error)
