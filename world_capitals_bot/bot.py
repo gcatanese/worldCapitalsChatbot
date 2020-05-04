@@ -1,9 +1,6 @@
-# Copyright (c) Microsoft Corporation. All rights reserved.
-# Licensed under the MIT License.
-
 from botbuilder.core import ActivityHandler, TurnContext, MessageFactory
 from botbuilder.schema import ChannelAccount, Activity, ActivityTypes, CardAction, SuggestedActions, ActionTypes
-from time import sleep
+
 import logging
 
 from conversation.multi_items_response import *
@@ -21,7 +18,7 @@ def list_cards(items):
 
 
 class MyBot(ActivityHandler):
-    # See https://aka.ms/about-bot-activity-message to learn more about the message and other activity types.
+
 
     @staticmethod
     def get_input(turn_context):
