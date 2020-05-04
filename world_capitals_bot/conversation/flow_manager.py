@@ -5,6 +5,8 @@ from conversation.multi_items_response import *
 
 from game.game_mgr import *
 
+game: Game = None
+
 
 def next(text):
     response = ''
@@ -18,19 +20,21 @@ def next(text):
         response = response_to_bye()
     elif intent is Intent.GAME_ON:
         # start game
-        game = Game(get_level(text))
+        global game
+        game = create(get_level(text))
+        logging.info(game)
         n = game.next_question()
-        logging.info(n)
-
         response = MultiItems(n.question, n.options)
     else:
-        response = MultiItems("What?", ["a", "b", "c"])
+
+        n = game.next_question()
+        response = MultiItems(n.question, n.options)
 
     return response
 
 
 def get_level(text):
-    if text.lower() == 'low':
+    if text.lower() == 'easy':
         return 1
     elif text.lower() == 'medium':
         return 2

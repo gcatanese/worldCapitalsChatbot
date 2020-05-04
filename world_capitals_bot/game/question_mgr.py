@@ -55,7 +55,7 @@ def get_df():
 
 
 def get_filename():
-    return '../../data/country-capitals.csv';
+    return 'data/country-capitals.csv';
 
 
 class Bucket:
