@@ -16,7 +16,7 @@ def get_intent(text):
 
 
 def is_game_on(text):
-    l = ['game on', 'lets start', 'lets go']
+    l = ['game on', 'lets start', 'lets go', 'easy', 'medium', 'difficult']
 
     return text.lower() in l
 

@@ -36,12 +36,11 @@ class MyBot(ActivityHandler):
         text = MyBot.get_input(turn_context)
 
         response = next(text)
-        logging.info(response)
 
         if type(response) is str:
             await self.send_text_reply(response, response)
-        elif isinstance(response, MultiItems):
-            self.send_suggested_options_reply(response, turn_context)
+        elif type(response) is MultiItems:
+            await self.send_suggested_options_reply(response, turn_context)
 
     async def send_text_reply(self, reply, turn_context: TurnContext):
         await turn_context.send_activities([
@@ -61,9 +60,7 @@ class MyBot(ActivityHandler):
     async def send_suggested_options_reply(self, response, turn_context: TurnContext):
         reply = MessageFactory.text(response.message)
         reply.suggested_actions = SuggestedActions(
-            actions=[
-                list_cards(response.items)
-            ]
+            actions = list_cards(response.items)
         )
         await turn_context.send_activity(reply)
 
