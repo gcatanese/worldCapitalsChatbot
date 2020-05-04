@@ -24,7 +24,7 @@ class MyBot(ActivityHandler):
     def get_input(turn_context):
         text = turn_context.activity.text
 
-        logging.info(f'input: {text}')
+        logging.info(f'Users says {text}')
 
         return text
 
