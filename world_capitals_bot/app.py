@@ -83,7 +83,7 @@ async def messages(req: Request) -> Response:
             return json_resp
         return Response(status=201)
     except Exception as exception:
-        logging.error(exception)
+        logging.error("Fatal error", exc_info=True)
         raise exception
 
 
