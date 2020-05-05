@@ -19,7 +19,6 @@ def list_cards(items):
 
 class MyBot(ActivityHandler):
 
-
     @staticmethod
     def get_input(turn_context):
         text = turn_context.activity.text
@@ -34,12 +33,21 @@ class MyBot(ActivityHandler):
 
         response = next(text)
 
-        if type(response) is str:
-            await self.send_text_reply(response, response)
-        elif type(response) is MultiItems:
-            await self.send_suggested_options_reply(response, turn_context)
+        await self.send_text_reply(response, turn_context)
+        # await self.send_suggested_options_reply(response, turn_context)
+        # if type(response) is str:
+        #     await self.send_text_reply(response, response)
+        # elif type(response) is MultiItems:
+        #     await self.send_suggested_options_reply(response, turn_context)
 
-    async def send_text_reply(self, reply, turn_context: TurnContext):
+    async def send_text_reply(self, response, turn_context: TurnContext):
+
+        # reply = MessageFactory.text(response.message)
+        # reply.suggested_actions = SuggestedActions(
+        #     actions=list_cards(response.items)
+        # )
+        reply = MessageFactory.suggested_actions(actions=list_cards(response.items), text=response.message)
+
         await turn_context.send_activities([
             Activity(
                 type=ActivityTypes.typing
@@ -50,14 +58,23 @@ class MyBot(ActivityHandler):
             ),
             Activity(
                 type=ActivityTypes.message,
-                text=reply
-            )
+                text="Lets go"
+            ),
+            Activity(
+                type=ActivityTypes.typing
+            ),
+            Activity(
+                type="delay",
+                value=2000
+            ),
+            MessageFactory.suggested_actions(actions=list_cards(response.items), text=response.message)
         ])
 
     async def send_suggested_options_reply(self, response, turn_context: TurnContext):
         reply = MessageFactory.text(response.message)
+
         reply.suggested_actions = SuggestedActions(
-            actions = list_cards(response.items)
+             actions=list_cards(response.items)
         )
         await turn_context.send_activity(reply)
 
