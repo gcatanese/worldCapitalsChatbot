@@ -9,26 +9,27 @@ game: Game = None
 
 
 def next(text):
-    response = ''
+    response = []
 
     intent = get_intent(text)
     logging.info(intent)
 
     if intent is Intent.GREET:
-        response = MultiItems("Choose your level", ["Easy", "Medium", "Difficult"])
+        response.append("Welcome")
+        response.append(MultiItems("Choose your level", ["Easy", "Medium", "Difficult"]))
     elif intent is Intent.BYE:
-        response = response_to_bye()
+        response.append(response_to_bye())
     elif intent is Intent.GAME_ON:
         # start game
         global game
         game = create(get_level(text))
         logging.info(game)
         n = game.next_question()
-        response = MultiItems(n.question, n.options)
+        response.append(MultiItems(n.question, n.options))
     else:
 
         n = game.next_question()
-        response = MultiItems(n.question, n.options)
+        response.append(MultiItems(n.question, n.options))
 
     return response
 

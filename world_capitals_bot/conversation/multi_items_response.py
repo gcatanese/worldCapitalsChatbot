@@ -1,9 +1,9 @@
-
 def response_with_options(question, items):
-    multiItems = MultiItems()
+    multi_items = MultiItems()
 
-    multiItems.message = question
-    multiItems.items = items
+    multi_items.message = question
+    multi_items.items = items
+
 
 class MultiItems:
 

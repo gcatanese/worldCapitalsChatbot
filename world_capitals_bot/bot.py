@@ -17,6 +17,35 @@ def list_cards(items):
     return cards
 
 
+def add_typing(activities):
+    activities.append(Activity(type=ActivityTypes.typing))
+    activities.append(Activity(type="delay", value=2000))
+
+    return activities
+
+
+def add_text_message(activities, response):
+    activities.append(Activity(type=ActivityTypes.message, text=response))
+
+
+def add_suggested_actions(activities, response):
+    suggested_actions = MessageFactory.suggested_actions(actions=list_cards(response.items), text=response.message)
+    activities.append(suggested_actions)
+
+
+def process(responses):
+    activities = []
+
+    for response in responses:
+        add_typing(activities)
+        if type(response) is str:
+            add_text_message(activities, response)
+        elif type(response) is MultiItems:
+            add_suggested_actions(activities, response)
+
+    return activities
+
+
 class MyBot(ActivityHandler):
 
     @staticmethod
@@ -31,52 +60,9 @@ class MyBot(ActivityHandler):
 
         text = MyBot.get_input(turn_context)
 
-        response = next(text)
+        activities = process(next(text))
 
-        await self.send_text_reply(response, turn_context)
-        # await self.send_suggested_options_reply(response, turn_context)
-        # if type(response) is str:
-        #     await self.send_text_reply(response, response)
-        # elif type(response) is MultiItems:
-        #     await self.send_suggested_options_reply(response, turn_context)
-
-    async def send_text_reply(self, response, turn_context: TurnContext):
-
-        # reply = MessageFactory.text(response.message)
-        # reply.suggested_actions = SuggestedActions(
-        #     actions=list_cards(response.items)
-        # )
-        reply = MessageFactory.suggested_actions(actions=list_cards(response.items), text=response.message)
-
-        await turn_context.send_activities([
-            Activity(
-                type=ActivityTypes.typing
-            ),
-            Activity(
-                type="delay",
-                value=2000
-            ),
-            Activity(
-                type=ActivityTypes.message,
-                text="Lets go"
-            ),
-            Activity(
-                type=ActivityTypes.typing
-            ),
-            Activity(
-                type="delay",
-                value=2000
-            ),
-            MessageFactory.suggested_actions(actions=list_cards(response.items), text=response.message)
-        ])
-
-    async def send_suggested_options_reply(self, response, turn_context: TurnContext):
-        reply = MessageFactory.text(response.message)
-
-        reply.suggested_actions = SuggestedActions(
-             actions=list_cards(response.items)
-        )
-        await turn_context.send_activity(reply)
+        await turn_context.send_activities(activities)
 
     async def on_members_added_activity(
             self,
