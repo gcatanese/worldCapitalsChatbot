@@ -1,8 +1,10 @@
-def response_with_options(question, items):
-    multi_items = MultiItems()
 
-    multi_items.message = question
-    multi_items.items = items
+class TextMessage:
+    def __init__(self, message):
+        self.message = message
+
+    def __str__(self):
+        return f"message:{self.message}"
 
 
 class MultiItems:

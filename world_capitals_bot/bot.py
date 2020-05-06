@@ -3,9 +3,8 @@ from botbuilder.schema import ChannelAccount, Activity, ActivityTypes, CardActio
 
 import logging
 
-from conversation.multi_items_response import *
-
 from conversation.flow_manager import next
+from conversation._model import *
 
 
 def list_cards(items):
@@ -25,7 +24,7 @@ def add_typing(activities):
 
 
 def add_text_message(activities, response):
-    activities.append(Activity(type=ActivityTypes.message, text=response))
+    activities.append(Activity(type=ActivityTypes.message, text=response.message))
 
 
 def add_suggested_actions(activities, response):
@@ -38,7 +37,7 @@ def process(responses):
 
     for response in responses:
         add_typing(activities)
-        if type(response) is str:
+        if type(response) is TextMessage:
             add_text_message(activities, response)
         elif type(response) is MultiItems:
             add_suggested_actions(activities, response)
