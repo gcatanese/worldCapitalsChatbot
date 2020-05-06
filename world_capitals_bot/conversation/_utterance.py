@@ -8,7 +8,7 @@ def say_hi():
 
 
 def say_intro():
-    options = ["Do you know all capitals? Test your knowledge", "Are you a world's capital expert? Lets see"]
+    options = ["Do you know all capitals? Test your knowledge 🌍", "Are you a world's capital expert? Lets see! 🌍"]
 
     return random.choice(options)
 
