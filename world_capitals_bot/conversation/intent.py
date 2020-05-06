@@ -5,6 +5,8 @@ import logging
 def get_intent(text):
     if is_greet(text):
         return Intent.GREET
+    elif is_start(text):
+        return Intent.START
     elif is_bye(text):
         return Intent.BYE
     elif is_game_on(text):
@@ -27,6 +29,12 @@ def is_game_over(text):
     return text.lower() in l
 
 
+def is_start(text):
+    l = ['start', 'lets start', 'start again']
+
+    return text.lower() in l
+
+
 def is_greet(text):
     l = ['hi', 'hello', 'good day']
 
@@ -44,3 +52,4 @@ class Intent(Enum):
     GAME_ON = 2
     GAME_OVER = 3
     BYE = 4
+    START = 5

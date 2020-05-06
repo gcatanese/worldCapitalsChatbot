@@ -15,6 +15,8 @@ def next(text):
 
     if intent is Intent.GREET:
         response.append("Welcome")
+        response.append(MultiItems("Ready?", ["Start", "Goodbye"]))
+    elif intent is Intent.START:
         response.append(MultiItems("Choose your level", ["Easy", "Medium", "Difficult"]))
     elif intent is Intent.BYE:
         response.append(response_to_bye())
@@ -34,6 +36,7 @@ def next(text):
 
         if n is None:
             response.append(f"Done {game.correct}/{game.total_questions}")
+            response.append(MultiItems("And now?", ["Start Again", "Goodbye"]))
         else:
             response.append(MultiItems(n.question, n.options))
 
