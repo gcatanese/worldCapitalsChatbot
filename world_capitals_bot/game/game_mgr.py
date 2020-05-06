@@ -47,9 +47,6 @@ class Game:
 
     def check(self, answer):
 
-        print(answer)
-        print(self.questions[self.current].answer)
-
         res = True if answer.lower() == self.questions[self.current].answer.lower() else False
 
         if res:

@@ -12,7 +12,6 @@ def next(text):
     response = []
 
     intent = get_intent(text)
-    logging.info(intent)
 
     if intent is Intent.GREET:
         response.append("Welcome")
@@ -24,12 +23,19 @@ def next(text):
         global game
         game = create(get_level(text))
         logging.info(game)
+
         n = game.next_question()
         response.append(MultiItems(n.question, n.options))
     else:
 
+        ret = game.check(text)
+        logging.info(f"{text}? {ret}")
         n = game.next_question()
-        response.append(MultiItems(n.question, n.options))
+
+        if n is None:
+            response.append(f"Done {game.correct}/{game.total_questions}")
+        else:
+            response.append(MultiItems(n.question, n.options))
 
     return response
 
