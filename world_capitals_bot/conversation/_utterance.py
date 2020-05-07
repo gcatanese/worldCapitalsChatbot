@@ -29,3 +29,6 @@ def say_well_done():
     options = ['You are the one!', 'Spot on champion!!', 'Amazing! 🥇']
 
     return random.choice(options)
+
+def say_welcome():
+    return "Welcome! Say hi to start 😉"

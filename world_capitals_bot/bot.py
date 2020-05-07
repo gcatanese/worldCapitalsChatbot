@@ -5,6 +5,7 @@ import logging
 
 from conversation.flow_manager import next
 from conversation._model import *
+from conversation._utterance import *
 
 
 def list_cards(items):
@@ -70,4 +71,4 @@ class MyBot(ActivityHandler):
     ):
         for member_added in members_added:
             if member_added.id != turn_context.activity.recipient.id:
-                await turn_context.send_activity("Hello and welcome!")
+                await turn_context.send_activity(say_welcome())
