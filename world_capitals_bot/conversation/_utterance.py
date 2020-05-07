@@ -26,7 +26,13 @@ def say_thank_you():
 
 
 def say_well_done():
-    options = ['You are the one!', 'Spot on champion!!', 'Amazing! 🥇']
+    options = ['You are the one!', 'Spot on champion!!', 'Amazing!', 'Impressive my friend!']
+
+    return random.choice(options)
+
+
+def say_well_done_emoji():
+    options = ['🏆', '🥇']
 
     return random.choice(options)
 

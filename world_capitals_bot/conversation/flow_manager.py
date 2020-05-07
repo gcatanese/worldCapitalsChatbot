@@ -40,6 +40,7 @@ def next(text):
             response.append(TextMessage(f"{game.correct}/{game.total_questions}"))
             if game.correct == game.total_questions:
                 response.append(TextMessage(say_well_done()))
+                response.append(TextMessage(say_well_done_emoji()))
             response.append(MultiItems("And now?", ["Start Again", "Goodbye"]))
         else:
             if answer:

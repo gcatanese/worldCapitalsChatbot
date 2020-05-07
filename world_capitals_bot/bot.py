@@ -48,6 +48,17 @@ def process(responses):
     return activities
 
 
+def get_platform(turn_context):
+    platform = ""
+
+    try:
+        platform = turn_context.activity.channel_id
+    except Exception as error:
+        logging.error(error)
+
+    return platform
+
+
 class MyBot(ActivityHandler):
 
     @staticmethod
@@ -56,7 +67,7 @@ class MyBot(ActivityHandler):
 
         if text is not None:
             logging.info(f'Users says {text}')
-            send_metrics(text, 'Beppe')
+            send_metrics(text, 'Beppe', get_platform(turn_context))
 
         return text
 
