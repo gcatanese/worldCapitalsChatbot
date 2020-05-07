@@ -30,5 +30,18 @@ def say_well_done():
 
     return random.choice(options)
 
+
 def say_welcome():
     return "Welcome! Say hi to start 😉"
+
+
+def say_correct():
+    options = ['✅']
+
+    return random.choice(options)
+
+
+def say_incorrect():
+    options = ['❌']
+
+    return random.choice(options)

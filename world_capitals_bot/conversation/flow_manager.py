@@ -31,8 +31,9 @@ def next(text):
         response.append(MultiItems(n.question, n.options))
     else:
 
-        ret = game.check(text)
-        logging.info(f"{text}? {ret}")
+        answer = game.check(text)
+        logging.info(f"{text}? {answer}")
+
         n = game.next_question()
 
         if n is None:
@@ -41,6 +42,10 @@ def next(text):
                 response.append(TextMessage(say_well_done()))
             response.append(MultiItems("And now?", ["Start Again", "Goodbye"]))
         else:
+            if answer:
+                response.append(TextMessage(say_correct()))
+            else:
+                response.append(TextMessage(say_incorrect()))
             response.append(MultiItems(n.question, n.options))
 
     return response
