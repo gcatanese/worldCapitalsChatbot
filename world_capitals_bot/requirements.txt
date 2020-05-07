@@ -1,4 +1,4 @@
-requests
+requests==2.22.0
 pandas
 botbuilder-core>=4.7.0
 aiohttp
