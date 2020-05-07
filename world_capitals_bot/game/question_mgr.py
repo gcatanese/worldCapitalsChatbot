@@ -3,22 +3,22 @@ import gettext
 
 from random import sample
 
-NUM_MULTICHOICE_OPTIONS = 3
+NUM_MULTI_CHOICE_OPTIONS = 3
 
 _ = gettext.gettext
 
 
-def get_buckets(num, continent):
+def get_buckets(num, level):
     list = []
 
     for x in range(num):
-        list.append(get_bucket(continent))
+        list.append(get_bucket(level))
 
     return list
 
 
-def get_bucket(continent):
-    df = get_filtered_df(continent)
+def get_bucket(level):
+    df = get_filtered_df(level)
 
     bucket = Bucket()
 
@@ -29,10 +29,10 @@ def get_bucket(continent):
     return bucket
 
 
-def get_filtered_df(continent):
+def get_filtered_df(level):
     df = get_df()
 
-    df = df[df['ContinentName'] == continent].sample(n=NUM_MULTICHOICE_OPTIONS)
+    df = df[df['Level'] == level].sample(n=NUM_MULTI_CHOICE_OPTIONS)
 
     return df
 
