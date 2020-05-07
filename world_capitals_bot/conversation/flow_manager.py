@@ -37,19 +37,24 @@ def next(text):
         n = game.next_question()
 
         if n is None:
+            get_feedback_on_answer(answer, response)
             response.append(TextMessage(f"{game.correct}/{game.total_questions}"))
             if game.correct == game.total_questions:
                 response.append(TextMessage(say_well_done()))
                 response.append(TextMessage(say_well_done_emoji()))
             response.append(MultiItems("And now?", ["Start Again", "Goodbye"]))
         else:
-            if answer:
-                response.append(TextMessage(say_correct()))
-            else:
-                response.append(TextMessage(say_incorrect()))
+            get_feedback_on_answer(answer, response)
             response.append(MultiItems(n.question, n.options))
 
     return response
+
+
+def get_feedback_on_answer(answer, response):
+    if answer:
+        response.append(TextMessage(say_correct()))
+    else:
+        response.append(TextMessage(say_incorrect()))
 
 
 def get_level(text):
