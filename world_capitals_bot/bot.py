@@ -7,6 +7,8 @@ from conversation.flow_manager import next
 from conversation._model import *
 from conversation._utterance import *
 
+from metrics.bot_metrics_connector import *
+
 
 def list_cards(items):
     cards = []
@@ -52,7 +54,9 @@ class MyBot(ActivityHandler):
     def get_input(turn_context):
         text = turn_context.activity.text
 
-        logging.info(f'Users says {text}')
+        if text is not None:
+            logging.info(f'Users says {text}')
+            send_metrics(text, 'Beppe')
 
         return text
 
