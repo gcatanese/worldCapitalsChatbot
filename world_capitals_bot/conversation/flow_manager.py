@@ -51,5 +51,5 @@ def get_level(text):
         return 1
     elif text.lower() == 'medium':
         return 2
-    elif text.lower() == 'high':
+    elif text.lower() == 'difficult':
         return 3

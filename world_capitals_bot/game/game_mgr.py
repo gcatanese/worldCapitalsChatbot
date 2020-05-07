@@ -4,24 +4,14 @@ NUM_QUESTIONS = 5
 
 
 def create(level, num_questions=None):
-
     if num_questions is None:
         num_questions = NUM_QUESTIONS
 
     game = Game(num_questions)
 
-    game.questions = get_buckets(NUM_QUESTIONS, get_continent(level))
+    game.questions = get_buckets(NUM_QUESTIONS, level)
 
     return game
-
-
-def get_continent(level):
-    if level == 1:
-        return 'Europe'
-    elif level == 2:
-        return 'Asia'
-    else:
-        return 'North America'
 
 
 class Game:
