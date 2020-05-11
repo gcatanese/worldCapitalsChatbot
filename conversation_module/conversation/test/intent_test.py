@@ -1,6 +1,6 @@
 import unittest
 
-from conversation.intent import *
+from conversation._intent import *
 
 
 class IntentTest(unittest.TestCase):

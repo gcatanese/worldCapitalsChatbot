@@ -4,6 +4,8 @@ import gettext
 from random import sample
 
 NUM_MULTI_CHOICE_OPTIONS = 3
+#DATA_FILE_PATH = '../data/country-capitals.csv'
+DATA_FILE_PATH = '../game_module/game/data/country-capitals.csv'
 
 _ = gettext.gettext
 
@@ -55,7 +57,7 @@ def get_df():
 
 
 def get_filename():
-    return 'data/country-capitals.csv';
+    return DATA_FILE_PATH
 
 
 class Bucket:

@@ -3,7 +3,7 @@ from botbuilder.schema import ChannelAccount, Activity, ActivityTypes, CardActio
 
 import logging
 
-from conversation.flow_manager import next
+from conversation.flow_manager import FlowManager
 from conversation._model import *
 from conversation._utterance import *
 
@@ -75,7 +75,9 @@ class MyBot(ActivityHandler):
 
         text = MyBot.get_input(turn_context)
 
-        activities = process(next(text))
+        flowManager = FlowManager()
+
+        activities = process(flowManager.next(text))
 
         await turn_context.send_activities(activities)
 

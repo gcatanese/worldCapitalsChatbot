@@ -1,10 +1,20 @@
 import random
 
+from conversation._model import MultiItems
+
 
 def say_hi():
     options = ['Hello', 'Hi', "Goodday", 'Hallo', "Hey!"]
 
     return random.choice(options)
+
+
+def say_menu():
+    games = []
+    games.append("World Capitals")
+    games.append("World Flags")
+
+    return MultiItems("Choose your game", games)
 
 
 def say_intro():
