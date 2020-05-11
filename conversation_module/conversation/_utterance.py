@@ -9,12 +9,15 @@ def say_hi():
     return random.choice(options)
 
 
-def say_menu():
-    games = []
-    games.append("World Capitals")
-    games.append("World Flags")
+def say_help():
+    options = ['I have a collection of fun games']
 
-    return MultiItems("Choose your game", games)
+    return random.choice(options)
+
+
+
+def say_choose_your_game():
+    return "Choose your game"
 
 
 def say_intro():

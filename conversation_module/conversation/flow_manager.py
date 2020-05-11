@@ -40,10 +40,10 @@ class FlowManager:
 
         if intent is Intent.GREET:
             response.append(TextMessage(say_hi()))
-            response.append(TextMessage(say_intro()))
-            response.append(say_menu)
+            response.append(MultiItems(say_choose_your_game(), game_list()))
         elif intent is Intent.HELP:
-            response.append(TextMessage(say_menu()))
+            response.append(TextMessage(say_help()))
+            response.append(MultiItems(say_choose_your_game(), game_list()))
         elif intent is Intent.START:
             response.append(MultiItems("Choose your level", ["Easy", "Medium", "Difficult"]))
         elif intent is Intent.BYE:

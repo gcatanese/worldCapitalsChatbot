@@ -3,6 +3,9 @@ from game.question_mgr import *
 NUM_QUESTIONS = 5
 
 
+def game_list():
+    return ["World Capitals", "Flags"]
+
 def create(level, num_questions=None):
     if num_questions is None:
         num_questions = NUM_QUESTIONS
