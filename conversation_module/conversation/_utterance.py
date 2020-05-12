@@ -20,6 +20,10 @@ def say_choose_your_game():
     return "Choose your game"
 
 
+def say_choose_your_level():
+    return "Choose your level"
+
+
 def say_intro():
     options = ["Do you know all capitals? Test your knowledge 🌍", "Are you a world's capital expert? Lets see! 🌍"]
 

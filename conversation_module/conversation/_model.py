@@ -19,3 +19,12 @@ class MultiItems:
 
     def __str__(self):
         return f"message:{self.message} items:{self.items}"
+
+
+class MultiItemOption:
+    def __init__(self):
+        self.title = ""
+        self.value = ""
+
+    def __str__(self):
+        return f"title:{self.title} value:{self.value}"

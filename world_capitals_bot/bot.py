@@ -14,7 +14,7 @@ def list_cards(items):
     cards = []
 
     for item in items:
-        cards.append(CardAction(title=item, type=ActionTypes.im_back, value=item))
+        cards.append(CardAction(title=item.title, type=ActionTypes.im_back, value=item.value))
 
     return cards
 
