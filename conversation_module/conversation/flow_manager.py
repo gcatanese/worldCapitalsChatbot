@@ -27,7 +27,7 @@ class FlowManager:
     def say_intro(self):
         return TextMessage(say_intro())
 
-    def __get_feedback_on_answer(self, answer, response):
+    def get_feedback_on_answer(self, answer, response):
         if answer:
             response.append(TextMessage(say_correct()))
         else:
@@ -40,14 +40,13 @@ class FlowManager:
 
         if intent is Intent.GREET:
             response.append(TextMessage(say_hi()))
-            response.append(MultiItems(say_choose_your_game(), game_list()))
+            response.append(MultiItems(say_choose_your_level(), level_list()))
         elif intent is Intent.HELP:
             response.append(TextMessage(say_help()))
-            response.append(MultiItems(say_choose_your_game(), game_list()))
-        elif intent is Intent.START:
-            response.append(MultiItems(say_choose_your_level, level_list()))
         elif intent is Intent.BYE:
             response.append(TextMessage(say_bye()))
+        elif intent is Intent.START_AGAIN:
+            response.append(MultiItems(say_choose_your_level(), level_list()))
         elif intent is Intent.GAME_ON:
             # start game
             global game
@@ -75,5 +74,3 @@ class FlowManager:
                 response.append(MultiItems(n.question, n.options))
 
         return response
-
-

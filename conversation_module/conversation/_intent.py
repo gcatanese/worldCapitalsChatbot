@@ -7,8 +7,8 @@ def get_intent(text):
         return Intent.GREET
     elif is_help(text):
         return Intent.HELP
-    elif is_start(text):
-        return Intent.START
+    elif is_start_again(text):
+        return Intent.START_AGAIN
     elif is_bye(text):
         return Intent.BYE
     elif is_game_on(text):
@@ -25,6 +25,12 @@ def is_game_on(text):
     return text.lower() in l
 
 
+def is_start_again(text):
+    l = ['start again']
+
+    return text.lower() in l
+
+
 def is_game_over(text):
     l = ['game over']
 
@@ -33,12 +39,6 @@ def is_game_over(text):
 
 def is_help(text):
     l = ['help', '/help']
-
-    return text.lower() in l
-
-
-def is_start(text):
-    l = ['start', 'lets start', 'start again']
 
     return text.lower() in l
 
@@ -60,6 +60,5 @@ class Intent(Enum):
     GAME_ON = 2
     GAME_OVER = 3
     BYE = 4
-    START = 5
+    START_AGAIN = 5
     HELP = 6
-    

@@ -1,16 +1,21 @@
-from conversation._model import MultiItemOption
 from game.question_mgr import *
 
 NUM_QUESTIONS = 5
 
 
-def game_list():
-    return [MultiItemOption("World Capitals", "World Capitals"), MultiItemOption("Flags!", "Flags")]
-
-
 def level_list():
-    return [MultiItemOption("Easy", "Easy"), MultiItemOption("Medium", "Medium"),
-            MultiItemOption("Difficult", "Difficult")]
+    return ["Easy", "Medium", "Difficult"]
+
+
+def create(game_name, num_questions=None):
+    if num_questions is None:
+        num_questions = NUM_QUESTIONS
+
+    game = Game(num_questions)
+
+    game.questions = get_buckets(game_name, NUM_QUESTIONS)
+
+    return game
 
 
 def create(level, num_questions=None):

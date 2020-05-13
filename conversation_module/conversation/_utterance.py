@@ -15,6 +15,11 @@ def say_help():
     return random.choice(options)
 
 
+def say_lets_go():
+    options = ["Let's go!", "Let's do it!", "Here we go!"]
+
+    return random.choice(options)
+
 
 def say_choose_your_game():
     return "Choose your game"
