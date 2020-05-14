@@ -40,6 +40,7 @@ class FlowManager:
 
         if intent is Intent.GREET:
             response.append(TextMessage(say_hi()))
+            response.append(TextMessage(say_intro()))
             response.append(MultiItems(say_choose_your_level(), level_list()))
         elif intent is Intent.HELP:
             response.append(TextMessage(say_help()))
