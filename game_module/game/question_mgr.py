@@ -4,7 +4,8 @@ import gettext
 from random import sample
 
 NUM_MULTI_CHOICE_OPTIONS = 3
-DATA_FILE_PATH = 'game/data/country-capitals.csv'
+#DATA_FILE_PATH = 'game/data/country-capitals.csv'
+DATA_FILE_PATH = '../game_module/game/data/country-capitals.csv'
 
 _ = gettext.gettext
 
