@@ -69,3 +69,5 @@ class Bucket:
 
     def __str__(self):
         return f"question:{self.question} answer:{self.answer} options:{self.options}"
+
+

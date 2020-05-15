@@ -107,14 +107,10 @@ class MyBot(ActivityHandler):
 
         # Get the state properties from the turn context.
         user_profile = await self.user_profile_accessor.get(turn_context, UserProfile)
-        conversation_data = await self.conversation_data_accessor.get(
-            turn_context, ConversationData
-        )
+        conversation_data = await self.conversation_data_accessor.get(turn_context, ConversationData)
 
         # Add message details to the conversation data.
-        conversation_data.timestamp = self.__datetime_from_utc_to_local(
-            turn_context.activity.timestamp
-        )
+        conversation_data.timestamp = self.__datetime_from_utc_to_local(turn_context.activity.timestamp)
         conversation_data.channel_id = get_platform(turn_context)
 
         text = MyBot.get_input(turn_context)
