@@ -21,3 +21,18 @@ class MultiItems:
         return f"message:{self.message} items:{self.items}"
 
 
+class QuizQuestion:
+
+    def __init__(self):
+        self.question = ""
+        self.answers = []
+        self.correct_answer = 0
+
+    def __init__(self, question, answers, correct_answer):
+        self.question = question
+        self.answers = answers
+        self.correct_answer = correct_answer
+
+    def __str__(self):
+        return f"question:{self.question} answers:{self.answers} correct_answer:{self.correct_answer}"
+
