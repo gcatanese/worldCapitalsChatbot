@@ -115,9 +115,9 @@ class MyBot(ActivityHandler):
 
         text = MyBot.get_input(turn_context)
 
-        flowManager = FlowManager()
+        flow_manager = FlowManager()
 
-        activities = process(flowManager.next(text))
+        activities = process(flow_manager.next(text))
 
         await turn_context.send_activities(activities)
 
