@@ -32,7 +32,7 @@ def help_command_handler(update, context):
 
 
 def main_handler(update, context):
-    logging.info(f'main_handler : {update}')
+    #logging.info(f'main_handler : {update}')
 
     flow_manager = FlowManager()
 
@@ -76,15 +76,13 @@ def add_suggested_actions(update, context, response):
 
 
 def add_quiz_question(update, context, response):
-    logging.info(f'add_quiz_question {response}')
-
     message = context.bot.send_poll(chat_id=get_chat_id(update), question=response.question,
                                     options=response.answers, type=Poll.QUIZ,
                                     correct_option_id=response.correct_answer_position)
 
     # Save some info about the poll the bot_data for later use in receive_quiz_answer
     # payload = {message.poll.id: {"chat_id": update.effective_chat.id,
-    #                             "message_id": message.message_id}}
+    #                              "message_id": message.message_id}}
     # context.bot_data.update(payload)
 
 
@@ -130,12 +128,18 @@ def main():
     dp.add_error_handler(error)
 
     # Start the Bot
-    updater.start_polling()
+    #updater.start_polling()
+    updater.start_webhook(listen="0.0.0.0",
+                          port=int(DefaultConfig.PORT),
+                          url_path=DefaultConfig.TELEGRAM_TOKEN)
+    updater.bot.setWebhook('https://worldcapitalschatbot.herokuapp.com/' + DefaultConfig.TELEGRAM_TOKEN)
+
     updater.idle()
 
 
 class DefaultConfig:
     TELEGRAM_TOKEN = os.environ.get("TELEGRAM_TOKEN", "")
+    PORT = os.environ.get("PORT", 8080)
 
 
 if __name__ == '__main__':
