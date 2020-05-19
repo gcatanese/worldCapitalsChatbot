@@ -65,9 +65,10 @@ class Bucket:
     def __init__(self):
         self.question = ""
         self.answer = ""
+        self.answer_position = -1
         self.options = []
 
     def __str__(self):
-        return f"question:{self.question} answer:{self.answer} options:{self.options}"
+        return f"question:{self.question} answer:{self.answer} answer_position:{self.answer_position} options:{self.options}"
 
 

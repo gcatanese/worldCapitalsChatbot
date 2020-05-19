@@ -55,8 +55,8 @@ class FlowManager:
             logging.info(game)
 
             n = game.next_question()
-            #response.append(MultiItems(n.question, n.options))
-            response.append(QuizQuestion(n.question, n.options, 1))
+            # response.append(MultiItems(n.question, n.options))
+            response.append(QuizQuestion(n.question, n.options, n.answer))
         else:
 
             answer = game.check(text)
@@ -65,15 +65,15 @@ class FlowManager:
             n = game.next_question()
 
             if n is None:
-                self.get_feedback_on_answer(answer, response)
+                #self.get_feedback_on_answer(answer, response)
                 response.append(TextMessage(f"{game.correct}/{game.total_questions}"))
                 if game.correct == game.total_questions:
                     response.append(TextMessage(say_well_done()))
                     response.append(TextMessage(say_well_done_emoji()))
                 response.append(MultiItems("And now?", ["Start Again", "Goodbye"]))
             else:
-                self.get_feedback_on_answer(answer, response)
-                #response.append(MultiItems(n.question, n.options))
-                response.append(QuizQuestion(n.question, n.options, 1))
+                # self.get_feedback_on_answer(answer, response)
+                # response.append(MultiItems(n.question, n.options))
+                response.append(QuizQuestion(n.question, n.options, n.answer))
 
         return response
