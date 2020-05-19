@@ -44,7 +44,7 @@ def is_help(text):
 
 
 def is_greet(text):
-    l = ['hi', 'hello', 'good day']
+    l = ['hi', 'hello', 'good day', '/start']
 
     return text.lower() in l
 

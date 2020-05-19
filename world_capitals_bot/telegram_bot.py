@@ -26,14 +26,9 @@ def get_chat_id(update):
     return chat_id
 
 
-def start(update, context):
-    """Send a message when the command /start is issued."""
-    update.message.reply_text('Hi!')
-
-
-def help(update, context):
+def help_command_handler(update, context):
     """Send a message when the command /help is issued."""
-    update.message.reply_text('Help!')
+    update.message.reply_text('Test your knowledge of world capitals 🌎 Say Hi to start!')
 
 
 def main_handler(update, context):
@@ -121,7 +116,7 @@ def main():
     dp = updater.dispatcher
 
     # cmd
-    dp.add_handler(CommandHandler("help", help))
+    dp.add_handler(CommandHandler("help", help_command_handler))
 
     # quiz answer handler
     dp.add_handler(PollHandler(main_handler, pass_update_queue=True, pass_job_queue=True,
