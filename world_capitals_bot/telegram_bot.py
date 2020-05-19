@@ -61,7 +61,8 @@ def add_typing(update, context):
 
 
 def add_text_message(update, context, message):
-    context.bot.send_message(chat_id=get_chat_id(update), text=message)
+    #context.bot.send_message(chat_id=get_chat_id(update), text=message)
+    update.message.reply_text(message)
 
 
 def add_suggested_actions(update, context, response):
@@ -128,11 +129,11 @@ def main():
     dp.add_error_handler(error)
 
     # Start the Bot
-    #updater.start_polling()
-    updater.start_webhook(listen="0.0.0.0",
-                          port=int(DefaultConfig.PORT),
-                          url_path=DefaultConfig.TELEGRAM_TOKEN)
-    updater.bot.setWebhook('https://worldcapitalschatbot.herokuapp.com/' + DefaultConfig.TELEGRAM_TOKEN)
+    updater.start_polling()
+    # updater.start_webhook(listen="0.0.0.0",
+    #                       port=int(DefaultConfig.PORT),
+    #                       url_path=DefaultConfig.TELEGRAM_TOKEN)
+    # updater.bot.setWebhook('https://worldcapitalschatbot.herokuapp.com/' + DefaultConfig.TELEGRAM_TOKEN)
 
     updater.idle()
 
