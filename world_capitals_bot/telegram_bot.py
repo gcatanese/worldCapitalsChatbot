@@ -18,10 +18,10 @@ def get_chat_id(update):
 
     if update.message is not None:
         chat_id = update.message.chat.id
-    elif update.callback_query.message is not None:
+    elif update.callback_query is not None:
         chat_id = update.callback_query.message.chat.id
-
-    logging.info(f"chat_id {chat_id}")
+    elif update.poll is not None:
+        chat_id = 931365322
 
     return chat_id
 
@@ -36,26 +36,20 @@ def help(update, context):
     update.message.reply_text('Help!')
 
 
-def suggested_actions_handler(update, context):
-    query = update.callback_query
-    logging.info(f'suggested_actions choice: {query}')
+def main_handler(update, context):
+    logging.info(f'main_handler : {update}')
 
     flow_manager = FlowManager()
-    process(update, context, flow_manager.next(query.data))
 
-
-def message_handler(update, context):
-    text = get_text(update)
-    logging.info(f"User says {text}")
-
-    flow_manager = FlowManager()
-    process(update, context, flow_manager.next(text))
+    if update.message is not None:
+        process(update, context, flow_manager.next(get_text(update)))
+    elif update.callback_query is not None:
+        process(update, context, flow_manager.next(update.callback_query.data))
+    elif update.poll is not None:
+        process(update, context, flow_manager.next(get_answer(update)))
 
 
 def process(update, context, responses):
-    logging.info(f"update {update}")
-    logging.info(f"context {context}")
-
     for response in responses:
         add_typing(update, context)
         if type(response) is TextMessage:
@@ -89,49 +83,36 @@ def add_suggested_actions(update, context, response):
 def add_quiz_question(update, context, response):
     logging.info(f'add_quiz_question {response}')
 
-    questions = ["1", "2", "4", "20"]
-    # message = update.effective_message.reply_poll("How many eggs do you need for a cake?",
-    #                                               questions, type=Poll.QUIZ, correct_option_id=2)
-    # context.bot.send_poll(chat_id=931365322, question="How many eggs do you need for a cake?",
-    #                       options=questions, type=Poll.QUIZ, correct_option_id=2)
-    context.bot.send_poll(chat_id=get_chat_id(update), question=response.question,
-                          options=response.answers, type=Poll.QUIZ, correct_option_id=response.correct_answer)
+    message = context.bot.send_poll(chat_id=get_chat_id(update), question=response.question,
+                                    options=response.answers, type=Poll.QUIZ,
+                                    correct_option_id=response.correct_answer_position)
 
     # Save some info about the poll the bot_data for later use in receive_quiz_answer
-    payload = {message.poll.id: {"chat_id": update.effective_chat.id,
-                                  "message_id": message.message_id}}
+    # payload = {message.poll.id: {"chat_id": update.effective_chat.id,
+    #                             "message_id": message.message_id}}
     # context.bot_data.update(payload)
-    # logging.info(f'payload {payload}')
-    logging.info(f'update {update}')
-
-
-def receive_quiz_answer(update, context):
-    # logging.info(f'receive_quiz_answer {context.bot_data}')
-    # logging.info(f'context {context.chat_data}')
-    # logging.info(f'context {context.user_data}')
-
-    # logging.info(f'update {update}')
-    # logging.info(f'correct_option_id {update.poll.correct_option_id}')
-    # logging.info(f'question {update.poll.question}')
-    # logging.info(f'options {update.poll.options}')
-    # quiz_data = context.bot_data[update.poll.id]
-    # logging.info(f'quiz_data {quiz_data}')
-    # logging.info(f'quiz_data["message_id"] {quiz_data["message_id"]}')
-    # send_question(update, context)
-
-    flow_manager = FlowManager()
-
-    process(update, context, flow_manager.next('aa'))
 
 
 def get_text(update):
     return update.message.text
 
 
+def get_answer(update):
+    answers = update.poll.options
+
+    ret = ""
+
+    for answer in answers:
+        if answer.voter_count == 1:
+            ret = answer.text
+
+    return ret
+
+
 def error(update, context):
     """Log Errors caused by Updates."""
     logger.warning('Update "%s" ', update)
-    logger.warning('Error "%s"', context.error)
+    logger.exception(context.error)
 
 
 def main():
@@ -142,22 +123,19 @@ def main():
     # cmd
     dp.add_handler(CommandHandler("help", help))
 
-    #
-    dp.add_handler(PollHandler(receive_quiz_answer, pass_update_queue=True, pass_job_queue=True,
-                                pass_user_data=True, pass_chat_data=True))
     # quiz answer handler
-    #dp.add_handler(PollHandler(receive_quiz_answer))
+    dp.add_handler(PollHandler(main_handler, pass_update_queue=True, pass_job_queue=True,
+                               pass_user_data=True, pass_chat_data=True))
     # suggested_actions_handler
-    updater.dispatcher.add_handler(CallbackQueryHandler(suggested_actions_handler))
+    updater.dispatcher.add_handler(CallbackQueryHandler(main_handler))
     # message handler
-    dp.add_handler(MessageHandler(Filters.text, message_handler))
+    dp.add_handler(MessageHandler(Filters.text, main_handler))
 
     # log all errors
     dp.add_error_handler(error)
 
     # Start the Bot
     updater.start_polling()
-
     updater.idle()
 
 
