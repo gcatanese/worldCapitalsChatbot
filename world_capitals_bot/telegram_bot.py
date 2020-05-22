@@ -1,7 +1,8 @@
 import os, time
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Poll
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler, PollHandler
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler, PollHandler, \
+    PollAnswerHandler
 import telegram
 
 from conversation.flow_manager import *
@@ -34,7 +35,7 @@ def help_command_handler(update, context):
 
 
 def main_handler(update, context):
-    logging.info(f'main_handler : {update}')
+    logging.info(f'update : {update}')
 
     flow_manager = FlowManager(get_chat_id(update), CHANNEL)
 
@@ -79,13 +80,15 @@ def add_suggested_actions(update, context, response):
 
 def add_quiz_question(update, context, response):
     message = context.bot.send_poll(chat_id=get_chat_id(update), question=response.question,
-                                    options=response.answers, type=Poll.QUIZ,
-                                    correct_option_id=response.correct_answer_position)
-
+                                     options=response.answers, type=Poll.QUIZ,
+                                     correct_option_id=response.correct_answer_position, is_anonymous=True)
+    # message = context.effective_message.reply_poll(question=response.question,
+    #                                 options=response.answers, type=Poll.QUIZ,
+    #                                 correct_option_id=response.correct_answer_position)
     # Save some info about the poll the bot_data for later use in receive_quiz_answer
-    # payload = {message.poll.id: {"chat_id": update.effective_chat.id,
-    #                              "message_id": message.message_id}}
+    # payload = {"chat_id": update.effective_chat.id}
     # context.bot_data.update(payload)
+    #logging.info(f"message {message}")
 
 
 def get_text(update):
@@ -118,13 +121,12 @@ def main():
     # cmd
     dp.add_handler(CommandHandler("help", help_command_handler))
 
-    # quiz answer handler
-    dp.add_handler(PollHandler(main_handler, pass_update_queue=True, pass_job_queue=True,
-                               pass_user_data=True, pass_chat_data=True))
     # suggested_actions_handler
     updater.dispatcher.add_handler(CallbackQueryHandler(main_handler))
     # message handler
     dp.add_handler(MessageHandler(Filters.text, main_handler))
+    # quiz answer handler
+    dp.add_handler(PollHandler(main_handler))
 
     # log all errors
     dp.add_error_handler(error)
