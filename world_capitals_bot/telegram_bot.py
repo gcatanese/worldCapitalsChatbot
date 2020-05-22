@@ -5,15 +5,13 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, Callb
     PollAnswerHandler
 import telegram
 
+from config import DefaultConfig
 from conversation.flow_manager import *
 
-# Enable logging
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.INFO)
-
-logger = logging.getLogger(__name__)
-
 CHANNEL = 'telegram'
+
+# Enable logging
+DefaultConfig.init_logging()
 
 
 def get_chat_id(update):
@@ -147,10 +145,7 @@ def main():
     updater.idle()
 
 
-class DefaultConfig:
-    TELEGRAM_TOKEN = os.environ.get("TELEGRAM_TOKEN", "")
-    PORT = os.environ.get("PORT", 8080)
-    MODE = os.environ.get("MODE", "polling")
+
 
 
 if __name__ == '__main__':
