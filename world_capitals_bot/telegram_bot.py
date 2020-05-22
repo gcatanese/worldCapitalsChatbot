@@ -12,6 +12,8 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 logger = logging.getLogger(__name__)
 
+CHANNEL = 'telegram'
+
 
 def get_chat_id(update):
     chat_id = -1
@@ -32,9 +34,9 @@ def help_command_handler(update, context):
 
 
 def main_handler(update, context):
-    #logging.info(f'main_handler : {update}')
+    logging.info(f'main_handler : {update}')
 
-    flow_manager = FlowManager()
+    flow_manager = FlowManager(get_chat_id(update), CHANNEL)
 
     if update.message is not None:
         process(update, context, flow_manager.next(get_text(update)))
@@ -61,8 +63,7 @@ def add_typing(update, context):
 
 
 def add_text_message(update, context, message):
-    #context.bot.send_message(chat_id=get_chat_id(update), text=message)
-    update.message.reply_text(message)
+    context.bot.send_message(chat_id=get_chat_id(update), text=message)
 
 
 def add_suggested_actions(update, context, response):
@@ -129,11 +130,17 @@ def main():
     dp.add_error_handler(error)
 
     # Start the Bot
-    updater.start_polling()
-    # updater.start_webhook(listen="0.0.0.0",
-    #                       port=int(DefaultConfig.PORT),
-    #                       url_path=DefaultConfig.TELEGRAM_TOKEN)
-    # updater.bot.setWebhook('https://worldcapitalschatbot.herokuapp.com/' + DefaultConfig.TELEGRAM_TOKEN)
+    if DefaultConfig.MODE == 'webhook':
+
+        updater.start_webhook(listen="0.0.0.0",
+                              port=int(DefaultConfig.PORT),
+                              url_path=DefaultConfig.TELEGRAM_TOKEN)
+        updater.bot.setWebhook('https://worldcapitalschatbot.herokuapp.com/' + DefaultConfig.TELEGRAM_TOKEN)
+
+        logging.info(f"Start webhook mode on port {DefaultConfig.PORT}")
+    else:
+        updater.start_polling()
+        logging.info(f"Start polling mode")
 
     updater.idle()
 
@@ -141,6 +148,7 @@ def main():
 class DefaultConfig:
     TELEGRAM_TOKEN = os.environ.get("TELEGRAM_TOKEN", "")
     PORT = os.environ.get("PORT", 8080)
+    MODE = os.environ.get("MODE", "polling")
 
 
 if __name__ == '__main__':

@@ -5,6 +5,9 @@ from game.question_mgr import *
 
 class QuestionMgtTest(unittest.TestCase):
 
+    def setUp(self):
+        set_file_path('../data/country-capitals.csv')
+
     def test_get_bucket(self):
         bucket = get_bucket(1)
 

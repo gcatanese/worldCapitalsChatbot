@@ -4,10 +4,15 @@ import gettext
 from random import sample
 
 NUM_MULTI_CHOICE_OPTIONS = 3
-DATA_FILE_PATH = 'game/data/country-capitals.csv'
-#DATA_FILE_PATH = '../game_module/game/data/country-capitals.csv'
+DATA_FILE_PATH = '../game_module/game/data/country-capitals.csv'
+
 
 _ = gettext.gettext
+
+
+def set_file_path(path):
+    global DATA_FILE_PATH
+    DATA_FILE_PATH = path
 
 
 def get_buckets(num, level):

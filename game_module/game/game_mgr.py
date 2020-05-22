@@ -18,13 +18,11 @@ def create(game_name, num_questions=None):
     return game
 
 
-def create(level, num_questions=None):
+def create(num_questions=None):
     if num_questions is None:
         num_questions = NUM_QUESTIONS
 
     game = Game(num_questions)
-
-    game.questions = get_buckets(NUM_QUESTIONS, level)
 
     return game
 
@@ -38,6 +36,9 @@ class Game:
         self.score = 0
         self.correct = 0
         self.incorrect = 0
+
+    def load_questions(self, level):
+        self.questions = get_buckets(NUM_QUESTIONS, level)
 
     def next_question(self):
 
@@ -62,4 +63,4 @@ class Game:
         return res
 
     def __str__(self):
-        return f"total_questions:{self.total_questions} current:{self.current} score:{self.score}"
+        return f"Game total_questions:{self.total_questions} current:{self.current} score:{self.score}"

@@ -14,6 +14,7 @@ from metrics.bot_metrics_connector import *
 
 from data_models import ConversationData, UserProfile
 
+CHANNEL = 'msbot'
 
 def list_cards(items):
     cards = []
@@ -115,7 +116,7 @@ class MyBot(ActivityHandler):
 
         text = MyBot.get_input(turn_context)
 
-        flow_manager = FlowManager()
+        flow_manager = FlowManager(get_chat_id(update), CHANNEL)
 
         activities = process(flow_manager.next(text))
 
