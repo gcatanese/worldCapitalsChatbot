@@ -16,6 +16,7 @@ from data_models import ConversationData, UserProfile
 
 CHANNEL = 'msbot'
 
+
 def list_cards(items):
     cards = []
 
@@ -41,6 +42,11 @@ def add_suggested_actions(activities, response):
     activities.append(suggested_actions)
 
 
+def add_quiz_question(activities, response):
+    suggested_actions = MessageFactory.suggested_actions(actions=list_cards(response.answers), text=response.question)
+    activities.append(suggested_actions)
+
+
 def process(responses):
     activities = []
 
@@ -50,6 +56,8 @@ def process(responses):
             add_text_message(activities, response)
         elif type(response) is MultiItems:
             add_suggested_actions(activities, response)
+        elif type(response) is QuizQuestion:
+            add_quiz_question(activities, response)
 
     return activities
 
@@ -116,7 +124,7 @@ class MyBot(ActivityHandler):
 
         text = MyBot.get_input(turn_context)
 
-        flow_manager = FlowManager(get_chat_id(update), CHANNEL)
+        flow_manager = FlowManager(turn_context.activity.conversation.id, CHANNEL)
 
         activities = process(flow_manager.next(text))
 
@@ -130,7 +138,6 @@ class MyBot(ActivityHandler):
         for member_added in members_added:
             if member_added.id != turn_context.activity.recipient.id:
                 await turn_context.send_activity(say_welcome())
-
 
     def __datetime_from_utc_to_local(self, utc_datetime):
         now_timestamp = time.time()
