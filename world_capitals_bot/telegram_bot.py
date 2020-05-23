@@ -13,7 +13,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 
-def get_chat_id(update):
+def get_chat_id(update, context):
     chat_id = -1
 
     if update.message is not None:
@@ -21,6 +21,10 @@ def get_chat_id(update):
     elif update.callback_query is not None:
         chat_id = update.callback_query.message.chat.id
     elif update.poll is not None:
+
+        logging.info(f'poll.id {update.poll.id}')
+        chat_id = context.bot_data[update.poll.id]
+        logging.info(f'chat_id {chat_id}')
         chat_id = 931365322
 
     return chat_id
@@ -32,7 +36,7 @@ def help_command_handler(update, context):
 
 
 def main_handler(update, context):
-    #logging.info(f'main_handler : {update}')
+    logging.info(f'main_handler update: {update}')
 
     flow_manager = FlowManager()
 
@@ -56,13 +60,12 @@ def process(update, context, responses):
 
 
 def add_typing(update, context):
-    context.bot.send_chat_action(chat_id=get_chat_id(update), action=telegram.ChatAction.TYPING, timeout=1)
-    time.sleep(2)
+    context.bot.send_chat_action(chat_id=get_chat_id(update, context), action=telegram.ChatAction.TYPING, timeout=1)
+    time.sleep(0)
 
 
 def add_text_message(update, context, message):
-    #context.bot.send_message(chat_id=get_chat_id(update), text=message)
-    update.message.reply_text(message)
+    context.bot.send_message(chat_id=get_chat_id(update, context), text=message)
 
 
 def add_suggested_actions(update, context, response):
@@ -73,18 +76,17 @@ def add_suggested_actions(update, context, response):
 
     reply_markup = InlineKeyboardMarkup([options])
 
-    context.bot.send_message(chat_id=get_chat_id(update), text=response.message, reply_markup=reply_markup)
+    context.bot.send_message(chat_id=get_chat_id(update, context), text=response.message, reply_markup=reply_markup)
 
 
 def add_quiz_question(update, context, response):
-    message = context.bot.send_poll(chat_id=get_chat_id(update), question=response.question,
+    message = context.bot.send_poll(chat_id=get_chat_id(update, context), question=response.question,
                                     options=response.answers, type=Poll.QUIZ,
-                                    correct_option_id=response.correct_answer_position)
+                                    correct_option_id=response.correct_answer_position, is_anonymous=True,
+                                    timeout=5, explanation="Tell me more...")
 
     # Save some info about the poll the bot_data for later use in receive_quiz_answer
-    # payload = {message.poll.id: {"chat_id": update.effective_chat.id,
-    #                              "message_id": message.message_id}}
-    # context.bot_data.update(payload)
+    context.bot_data.update({message.poll.id: message.chat.id})
 
 
 def get_text(update):
@@ -118,10 +120,9 @@ def main():
     dp.add_handler(CommandHandler("help", help_command_handler))
 
     # quiz answer handler
-    dp.add_handler(PollHandler(main_handler, pass_update_queue=True, pass_job_queue=True,
-                               pass_user_data=True, pass_chat_data=True))
+    dp.add_handler(PollHandler(main_handler, pass_chat_data=True, pass_user_data=True))
     # suggested_actions_handler
-    updater.dispatcher.add_handler(CallbackQueryHandler(main_handler))
+    updater.dispatcher.add_handler(CallbackQueryHandler(main_handler, pass_chat_data=True, pass_user_data=True))
     # message handler
     dp.add_handler(MessageHandler(Filters.text, main_handler))
 
