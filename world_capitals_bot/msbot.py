@@ -22,7 +22,9 @@ from botbuilder.schema import Activity, ActivityTypes
 from bot import MyBot
 from config import DefaultConfig
 
-logging.basicConfig(level=logging.INFO)
+# Enable logging
+DefaultConfig.init_logging()
+
 
 CONFIG = DefaultConfig()
 

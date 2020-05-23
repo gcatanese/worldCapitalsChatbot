@@ -5,14 +5,23 @@ from game.game_mgr import *
 
 class GameMgtTest(unittest.TestCase):
 
+    def setUp(self):
+        set_file_path('../data/country-capitals.csv')
+
     def test_create(self):
-        game = create(1)
-        questions = game.questions
+        game = create()
+
+        self.assertIsNotNone(game)
+        self.assertEqual(5, game.total_questions)
+
+    def test_load_questions(self):
+        game = create()
+        game.load_questions(1)
 
         self.assertIsNotNone(game)
         self.assertEqual(5, len(game.questions))
 
-        print(questions[0])
+        print(game.questions[0])
 
     def test_next(self):
         game = self.create_mock()

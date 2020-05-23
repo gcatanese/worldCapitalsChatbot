@@ -1,13 +1,18 @@
 import pandas as pd
-import gettext
+import gettext, logging
 
 from random import sample
 
 NUM_MULTI_CHOICE_OPTIONS = 3
-#DATA_FILE_PATH = 'game/data/country-capitals.csv'
-DATA_FILE_PATH = '../game_module/game/data/country-capitals.csv'
+DATA_FILE_PATH = 'game/data/country-capitals.csv'
+DATA_FILE_PATH_2 = '../game_module/game/data/country-capitals.csv'
 
 _ = gettext.gettext
+
+
+def set_file_path(path):
+    global DATA_FILE_PATH
+    DATA_FILE_PATH = path
 
 
 def get_buckets(num, level):
@@ -53,11 +58,18 @@ def get_options(df):
 
 
 def get_df():
-    return pd.read_csv(get_filename())
+    try:
+        return pd.read_csv(DATA_FILE_PATH)
+    except FileNotFoundError:
+        None
+    try:
+        return pd.read_csv(DATA_FILE_PATH_2)
+    except FileNotFoundError:
+        None
+
+    raise Exception("CVS file not found")
 
 
-def get_filename():
-    return DATA_FILE_PATH
 
 
 class Bucket:

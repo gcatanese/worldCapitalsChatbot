@@ -1,16 +1,17 @@
 import os, time
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Poll
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler, PollHandler
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler, PollHandler, \
+    PollAnswerHandler
 import telegram
 
+from config import DefaultConfig
 from conversation.flow_manager import *
 
-# Enable logging
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.INFO)
+CHANNEL = 'telegram'
 
-logger = logging.getLogger(__name__)
+# Enable logging
+DefaultConfig.init_logging()
 
 
 def get_chat_id(update, context):
@@ -36,9 +37,9 @@ def help_command_handler(update, context):
 
 
 def main_handler(update, context):
-    logging.info(f'main_handler update: {update}')
+    logging.info(f'update : {update}')
 
-    flow_manager = FlowManager()
+    flow_manager = FlowManager(get_chat_id(update, context), CHANNEL)
 
     if update.message is not None:
         process(update, context, flow_manager.next(get_text(update)))
@@ -107,8 +108,8 @@ def get_answer(update):
 
 def error(update, context):
     """Log Errors caused by Updates."""
-    logger.warning('Update "%s" ', update)
-    logger.exception(context.error)
+    logging.warning('Update "%s" ', update)
+    logging.exception(context.error)
 
 
 def main():
@@ -125,23 +126,26 @@ def main():
     updater.dispatcher.add_handler(CallbackQueryHandler(main_handler, pass_chat_data=True, pass_user_data=True))
     # message handler
     dp.add_handler(MessageHandler(Filters.text, main_handler))
+    # quiz answer handler
+    dp.add_handler(PollHandler(main_handler))
 
     # log all errors
     dp.add_error_handler(error)
 
     # Start the Bot
-    updater.start_polling()
-    # updater.start_webhook(listen="0.0.0.0",
-    #                       port=int(DefaultConfig.PORT),
-    #                       url_path=DefaultConfig.TELEGRAM_TOKEN)
-    # updater.bot.setWebhook('https://worldcapitalschatbot.herokuapp.com/' + DefaultConfig.TELEGRAM_TOKEN)
+    if DefaultConfig.MODE == 'webhook':
+
+        updater.start_webhook(listen="0.0.0.0",
+                              port=int(DefaultConfig.PORT),
+                              url_path=DefaultConfig.TELEGRAM_TOKEN)
+        updater.bot.setWebhook('https://worldcapitalschatbot.herokuapp.com/' + DefaultConfig.TELEGRAM_TOKEN)
+
+        logging.info(f"Start webhook mode on port {DefaultConfig.PORT}")
+    else:
+        updater.start_polling()
+        logging.info(f"Start polling mode")
 
     updater.idle()
-
-
-class DefaultConfig:
-    TELEGRAM_TOKEN = os.environ.get("TELEGRAM_TOKEN", "")
-    PORT = os.environ.get("PORT", 8080)
 
 
 if __name__ == '__main__':

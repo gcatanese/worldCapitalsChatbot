@@ -2,10 +2,9 @@ import logging
 from conversation._intent import get_intent, Intent
 from conversation._utterance import *
 from conversation._model import *
+from conversation.game_registry import *
 
 from game.game_mgr import *
-
-game: Game = None
 
 
 def get_level(text):
@@ -18,8 +17,9 @@ def get_level(text):
 
 
 class FlowManager:
-    def __init__(self):
-        None
+    def __init__(self, id, channel):
+        self.id = id
+        self.channel = channel
 
     def __str__(self):
         return f"message:{self.message}"
@@ -49,15 +49,16 @@ class FlowManager:
         elif intent is Intent.START_AGAIN:
             response.append(MultiItems(say_choose_your_level(), level_list()))
         elif intent is Intent.GAME_ON:
-            # start game
-            global game
-            game = create(get_level(text))
-            logging.info(game)
+            # (re)start game
+            game = create()
+            game.load_questions(get_level(text))
+            add_to_dict(self.id, game)
 
             n = game.next_question()
-            # response.append(MultiItems(n.question, n.options))
             response.append(QuizQuestion(n.question, n.options, n.answer))
         else:
+
+            game = get_from_dict(self.id)
 
             answer = game.check(text)
             logging.info(f"{text}? {answer}")
@@ -65,15 +66,19 @@ class FlowManager:
             n = game.next_question()
 
             if n is None:
-                #self.get_feedback_on_answer(answer, response)
+                if self.channel != 'telegram':
+                    # feedback message (non-telegram channels)
+                    self.get_feedback_on_answer(answer, response)
                 response.append(TextMessage(f"{game.correct}/{game.total_questions}"))
                 if game.correct == game.total_questions:
                     response.append(TextMessage(say_well_done()))
                     response.append(TextMessage(say_well_done_emoji()))
                 response.append(MultiItems("And now?", ["Start Again", "Goodbye"]))
             else:
-                # self.get_feedback_on_answer(answer, response)
-                # response.append(MultiItems(n.question, n.options))
+                if self.channel != 'telegram':
+                    # feedback message (non-telegram channels)
+                    self.get_feedback_on_answer(answer, response)
+
                 response.append(QuizQuestion(n.question, n.options, n.answer))
 
         return response
