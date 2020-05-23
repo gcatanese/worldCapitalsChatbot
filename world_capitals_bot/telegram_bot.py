@@ -22,11 +22,7 @@ def get_chat_id(update, context):
     elif update.callback_query is not None:
         chat_id = update.callback_query.message.chat.id
     elif update.poll is not None:
-
-        logging.info(f'poll.id {update.poll.id}')
         chat_id = context.bot_data[update.poll.id]
-        logging.info(f'chat_id {chat_id}')
-        chat_id = 931365322
 
     return chat_id
 
@@ -84,7 +80,7 @@ def add_quiz_question(update, context, response):
     message = context.bot.send_poll(chat_id=get_chat_id(update, context), question=response.question,
                                     options=response.answers, type=Poll.QUIZ,
                                     correct_option_id=response.correct_answer_position, is_anonymous=True,
-                                    timeout=5, explanation="Tell me more...")
+                                    timeout=5)
 
     # Save some info about the poll the bot_data for later use in receive_quiz_answer
     context.bot_data.update({message.poll.id: message.chat.id})
