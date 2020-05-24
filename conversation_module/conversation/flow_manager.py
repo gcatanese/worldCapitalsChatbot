@@ -45,6 +45,9 @@ class FlowManager:
             response.append(TextMessage(say_hi()))
             response.append(TextMessage(say_intro()))
             response.append(MultiItems(say_choose_your_level(), level_list()))
+
+            send_metrics(text, self.user, self.channel)
+
         elif intent is Intent.HELP:
             response.append(TextMessage(say_help()))
         elif intent is Intent.BYE:

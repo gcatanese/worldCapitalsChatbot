@@ -37,14 +37,14 @@ def get_user(update):
     elif update.callback_query is not None:
         _from = update.callback_query.from_user
 
-    logging.info(f'_from {_from}')
-
     if _from is not None:
         user = User()
         user.id = _from.id
         user.first_name = _from.first_name
         user.last_name = _from.last_name
         user.lang = _from.language_code if _from.language_code is not None else 'n/a'
+
+    logging.info(f'from {user}')
 
     return user
 
@@ -65,6 +65,8 @@ def main_handler(update, context):
         process(update, context, flow_manager.next(update.callback_query.data))
     elif update.poll is not None:
         process(update, context, flow_manager.next(get_answer(update)))
+        # remove from bot_data
+        del context.bot_data[update.poll.id]
 
 
 def process(update, context, responses):
