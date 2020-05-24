@@ -9,6 +9,7 @@ class DefaultConfig:
 
     TELEGRAM_TOKEN = os.environ.get("TELEGRAM_TOKEN", "")
     MODE = os.environ.get("MODE", "polling")
+    WEBHOOK_URL = os.environ.get("WEBHOOK_URL", "")
 
     LOG_LEVEL = os.environ.get('LOG_LEVEL', 'INFO').upper()
 
