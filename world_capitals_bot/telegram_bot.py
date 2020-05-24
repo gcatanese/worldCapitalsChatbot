@@ -10,8 +10,6 @@ from conversation.flow_manager import *
 
 CHANNEL = 'telegram'
 
-# Enable logging
-DefaultConfig.init_logging()
 
 
 def get_chat_id(update, context):
@@ -169,4 +167,7 @@ def main():
 
 
 if __name__ == '__main__':
+    # Enable logging
+    DefaultConfig.init_logging()
+
     main()
