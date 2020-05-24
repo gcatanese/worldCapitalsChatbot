@@ -10,8 +10,6 @@ from conversation.flow_manager import FlowManager
 from conversation._model import *
 from conversation._utterance import *
 
-from metrics.bot_metrics_connector import *
-
 from data_models import ConversationData, UserProfile
 
 CHANNEL = 'msbot'
@@ -102,7 +100,6 @@ class MyBot(ActivityHandler):
 
         if text is not None:
             logging.info(f'Users says {text}')
-            send_metrics(text, 'Beppe', get_platform(turn_context))
 
         return text
 
@@ -124,7 +121,7 @@ class MyBot(ActivityHandler):
 
         text = MyBot.get_input(turn_context)
 
-        flow_manager = FlowManager(turn_context.activity.conversation.id, CHANNEL)
+        flow_manager = FlowManager(turn_context.activity.conversation.id, CHANNEL, User(1))
 
         activities = process(flow_manager.next(text))
 

@@ -4,6 +4,8 @@ from conversation._utterance import *
 from conversation._model import *
 from conversation.game_registry import *
 
+from metrics.bot_metrics_connector import *
+
 from game.game_mgr import *
 
 
@@ -17,9 +19,10 @@ def get_level(text):
 
 
 class FlowManager:
-    def __init__(self, id, channel):
+    def __init__(self, id, channel, user):
         self.id = id
         self.channel = channel
+        self.user = user
 
     def __str__(self):
         return f"message:{self.message}"
@@ -69,11 +72,17 @@ class FlowManager:
                 if self.channel != 'telegram':
                     # feedback message (non-telegram channels)
                     self.get_feedback_on_answer(answer, response)
-                response.append(TextMessage(f"{game.correct}/{game.total_questions}"))
+
+                score = f"{game.correct}/{game.total_questions}"
+                response.append(TextMessage(score))
                 if game.correct == game.total_questions:
                     response.append(TextMessage(say_well_done()))
                     response.append(TextMessage(say_well_done_emoji()))
                 response.append(MultiItems("And now?", ["Start Again", "Goodbye"]))
+
+                # record Game Over
+                msg = f'Score {score}'
+                send_metrics(text, self.user, self.channel)
             else:
                 if self.channel != 'telegram':
                     # feedback message (non-telegram channels)

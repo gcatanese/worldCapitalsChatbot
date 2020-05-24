@@ -27,6 +27,28 @@ def get_chat_id(update, context):
     return chat_id
 
 
+def get_user(update):
+    user: User = None
+
+    _from = None
+
+    if update.message is not None:
+        _from = update.message.from_user
+    elif update.callback_query is not None:
+        _from = update.callback_query.from_user
+
+    logging.info(f'_from {_from}')
+
+    if _from is not None:
+        user = User()
+        user.id = _from.id
+        user.first_name = _from.first_name
+        user.last_name = _from.last_name
+        user.lang = _from.language_code if _from.language_code is not None else 'n/a'
+
+    return user
+
+
 def help_command_handler(update, context):
     """Send a message when the command /help is issued."""
     update.message.reply_text('Test your knowledge of world capitals 🌎 Say Hi to start!')
@@ -35,7 +57,7 @@ def help_command_handler(update, context):
 def main_handler(update, context):
     logging.info(f'update : {update}')
 
-    flow_manager = FlowManager(get_chat_id(update, context), CHANNEL)
+    flow_manager = FlowManager(get_chat_id(update, context), CHANNEL, get_user(update))
 
     if update.message is not None:
         process(update, context, flow_manager.next(get_text(update)))

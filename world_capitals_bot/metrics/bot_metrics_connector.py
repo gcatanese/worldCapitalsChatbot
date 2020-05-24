@@ -1,17 +1,16 @@
 import requests, os, logging
 
 
-def send_metrics(text, user_id, platform):
+def send_metrics(text, user, platform):
 
     api_key = get_api_key()
 
-    if api_key is not None:
+    if api_key is not None and user is not None:
         p = {'token': api_key}
         headers = {'Content-Type': 'application/json'}
-        json = get_json(text, user_id, platform)
+        json = get_json(text, user.get_full_name_and_lang(), platform)
 
-        r = requests.post("https://api.bot-metrics.com/v1/messages", params=p,
-                      json=json, headers=headers)
+        r = requests.post("https://api.bot-metrics.com/v1/messages", params=p, json=json, headers=headers)
 
         logging.debug(r)
 
