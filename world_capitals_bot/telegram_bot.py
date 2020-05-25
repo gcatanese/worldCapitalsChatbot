@@ -69,10 +69,12 @@ def main_handler(update, context):
 
 def process(update, context, responses):
     for response in responses:
-        add_typing(update, context)
+
         if type(response) is TextMessage:
+            add_typing(update, context)
             add_text_message(update, context, response.message)
         elif type(response) is MultiItems:
+            add_typing(update, context)
             add_suggested_actions(update, context, response)
         elif type(response) is QuizQuestion:
             add_quiz_question(update, context, response)
@@ -80,7 +82,7 @@ def process(update, context, responses):
 
 def add_typing(update, context):
     context.bot.send_chat_action(chat_id=get_chat_id(update, context), action=telegram.ChatAction.TYPING, timeout=1)
-    time.sleep(0)
+    time.sleep(1)
 
 
 def add_text_message(update, context, message):
