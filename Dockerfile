@@ -8,8 +8,8 @@ WORKDIR /app
 RUN pip install -r requirements.txt
 
 ENTRYPOINT ["python"]
-#CMD ["telegram_bot.py"]
-CMD ["msbot.py"]
+CMD ["telegram_bot.py"]
+
 
 
 
