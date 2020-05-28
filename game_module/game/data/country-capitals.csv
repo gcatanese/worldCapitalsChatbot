@@ -2,7 +2,6 @@ CountryName,CapitalName,CapitalLatitude,CapitalLongitude,CountryCode,ContinentNa
 Somaliland,Hargeisa,9.55,44.05,NULL,Africa,2
 South Georgia and South Sandwich Islands,King Edward Point,-54.283333,-36.5,GS,Antarctica,3
 French Southern and Antarctic Lands,Port-aux-Français,-49.35,70.216667,TF,Antarctica,3
-Palestine,Jerusalem,31.76666667,35.233333,PS,Asia,1
 Aland Islands,Mariehamn,60.116667,19.9,AX,Europe,3
 Nauru,Yaren,-0.5477,166.920867,NR,Australia,3
 Saint Martin,Marigot,18.0731,-63.0822,MF,North America,3
@@ -108,7 +107,6 @@ Iran,Tehran,35.7,51.416667,IR,Asia,1
 Iraq,Baghdad,33.33333333,44.4,IQ,Asia,1
 Ireland,Dublin,53.31666667,-6.233333,IE,Europe,1
 Isle of Man,Douglas,54.15,-4.483333,IM,Europe,2
-Israel,Jerusalem,31.76666667,35.233333,IL,Asia,1
 Italy,Rome,41.9,12.483333,IT,Europe,1
 Jamaica,Kingston,18,-76.8,JM,North America,2
 Japan,Tokyo,35.68333333,139.75,JP,Asia,1
