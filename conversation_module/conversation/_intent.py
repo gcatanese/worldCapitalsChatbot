@@ -15,6 +15,8 @@ def get_intent(text):
         return Intent.GAME_ON
     elif is_game_over(text):
         return Intent.GAME_OVER
+    elif is_rating(text):
+        return Intent.RATING
     else:
         return None
 
@@ -54,6 +56,9 @@ def is_bye(text):
 
     return text.lower() in l
 
+def is_rating(text):
+
+    return '⭐' in text
 
 class Intent(Enum):
     GREET = 1
@@ -62,3 +67,4 @@ class Intent(Enum):
     BYE = 4
     START_AGAIN = 5
     HELP = 6
+    RATING = 7

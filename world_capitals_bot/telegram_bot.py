@@ -38,8 +38,8 @@ def get_user(update):
     if _from is not None:
         user = User()
         user.id = _from.id
-        user.first_name = _from.first_name
-        user.last_name = _from.last_name
+        user.first_name = _from.first_name if _from.first_name is not None else ''
+        user.last_name = _from.last_name if _from.last_name is not None else ''
         user.lang = _from.language_code if _from.language_code is not None else 'n/a'
 
     logging.info(f'from {user}')

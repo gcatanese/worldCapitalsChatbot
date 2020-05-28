@@ -51,7 +51,12 @@ class FlowManager:
         elif intent is Intent.HELP:
             response.append(TextMessage(say_help()))
         elif intent is Intent.BYE:
+            response.append(MultiItems("What do you think?", ["⭐", "⭐⭐", "⭐⭐⭐"]))
+        elif intent is Intent.RATING:
             response.append(TextMessage(say_bye()))
+
+            send_metrics(text, self.user, self.channel)
+
         elif intent is Intent.START_AGAIN:
             response.append(MultiItems(say_choose_your_level(), level_list()))
         elif intent is Intent.GAME_ON:
