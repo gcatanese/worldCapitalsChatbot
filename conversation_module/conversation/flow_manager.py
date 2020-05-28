@@ -55,11 +55,20 @@ class FlowManager:
         elif intent is Intent.RATING:
             response.append(TextMessage(say_bye()))
 
+            game = get_from_dict(self.id)
+            score = f"{game.correct}/{game.total_questions}"
+
+            send_metrics(score, self.user, self.channel)
             send_metrics(text, self.user, self.channel)
+
+            remove_from_dict(self.id)
 
         elif intent is Intent.START_AGAIN:
             response.append(MultiItems(say_choose_your_level(), level_list()))
         elif intent is Intent.GAME_ON:
+
+            send_metrics(text, self.user, self.channel)
+
             # (re)start game
             game = create()
             game.load_questions(get_level(text))
