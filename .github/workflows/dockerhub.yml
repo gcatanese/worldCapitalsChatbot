@@ -16,7 +16,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_SECRET }}
 
     - name: Build latest
-      run: docker build -t perosa/worldcapitalschatbot:latest .
+      run: docker build -t perosa/worldcapitalsquizchatbot:latest .
 
     - name: Push to DockerHub
-      run: docker push perosa/worldcapitalschatbot:latest
+      run: docker push perosa/worldcapitalsquizchatbot:latest
