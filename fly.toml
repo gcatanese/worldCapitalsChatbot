@@ -9,7 +9,7 @@ processes = []
   image = "perosa/worldcapitalsquizchatbot:latest"
 
 [env]
-  MODE="polling"
+  MODE="webhook"
   WEBHOOK_URL="https://worldcapitalschatbot.fly.dev/"
 [experimental]
   allowed_public_ports = []
