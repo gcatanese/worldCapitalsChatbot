@@ -3,7 +3,7 @@ import logging
 
 
 class DefaultConfig:
-    PORT = int(os.environ.get("PORT", 3978))
+    PORT = int(os.environ.get("PORT", 8080))
     APP_ID = os.environ.get("MICROSOFT_APP_ID", "")
     APP_PASSWORD = os.environ.get("MICROSOFT_APP_PWD", "")
 
