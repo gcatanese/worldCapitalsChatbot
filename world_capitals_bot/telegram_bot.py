@@ -1,3 +1,4 @@
+import logging
 import os, time
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Poll
@@ -152,6 +153,7 @@ def main():
     # log all errors
     dp.add_error_handler(error)
 
+    logging.info("mode: " + DefaultConfig.MODE)
     # Start the Bot
     if DefaultConfig.MODE == 'webhook':
 
